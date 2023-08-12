@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>HTML5 Canvas</h1>
+
+
+<p>this is simple captcha js using random position for clicked input instead of fixed position, if poived for it encyprtion and decyrption between client and server could be relaibe to be used</p>
+
+
+<p style="margin:0;">Click inside the blue sqaure to confirm you are not robot</p>
+<div style="width:100%;">
+<canvas id="myCanvas" width="200" height="200" style="border:1px solid grey;width:100%;max-width:200px;"></canvas>
+</div>
+
+<script>
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
+
+
+  
+//42-82  23-63
+// 90-130 + 104 + 144
+function captchav1(){
+
+let randomStartWidth = 0, randomStartHeight = 0;
+let repeater = true;
+
+
+function randomStart(){
+  ctx.clearRect(0, 0,200, 200);
+  ctx.beginPath();
+  ctx.strokeStyle = 'blue';
+  randomStartWidth = Math.floor(Math.random()*160);
+  randomStartHeight = Math.floor(Math.random()*160);
+  
+  
+  ctx.rect(randomStartWidth,randomStartHeight,40,40);
+  
+  ctx.stroke();
+
+  // captcha expire after 7 seconds if not answered
+  setTimeout( ()=>{
+    if (repeater){
+      randomStart();
+    }
+   }
+   , 5000 );
+  
+}
+
+
+function clearRect(startY, startX){
+  ctx.clearRect(startY-1, startX-1, 41, 41);
+  ctx.clearRect(startY+40, startX-1, 41, 41);
+  ctx.clearRect(startY, (startX+40)-1, 41, 41);
+  
+}
+
+function on_canvas_click(ev) {
+  var boundingRect = ev.target.getBoundingClientRect();
+  var x = ev.clientX - boundingRect.left,
+      y = ev.clientY - boundingRect.top;
+
+  //$("#logX").text("x="+x);
+  //$("#logY").text("y="+y);
+  console.log('x='+x, 'y='+y);
+  
+  const validX = x > randomStartWidth && x < randomStartWidth + 40;
+  console.log(x, randomStartWidth, randomStartWidth + 40);
+  console.log(validX);
+  
+  const validY = y > randomStartHeight && y < randomStartHeight + 40;
+  console.log(y, randomStartHeight, randomStartHeight + 40);
+  console.log(validY);
+  
+  console.log("clicked within canvas", validX && validY);
+  
+  if (validY && validX){
+    drawNick();
+  }
+}
+
+randomStart();
+canvas.addEventListener("click", on_canvas_click, false);
+
+
+function drawNick(){
+  repeater = false;
+  clearRect(randomStartWidth, randomStartHeight);
+  ctx.beginPath();
+  
+  ctx.strokeStyle = 'green';
+  let lastX = randomStartWidth + 40;
+  let startX = randomStartWidth;
+  
+  let startY = randomStartHeight;
+  let nickStraightY = randomStartHeight + 20;
+  let lastY = randomStartHeight + 40;
+  ctx.moveTo(startX,nickStraightY);
+  ctx.lineTo(startX,lastY);
+  
+  // Define a start point
+  ctx.moveTo(lastX,startY);
+  
+  // Define an end point
+  ctx.lineTo(startX,lastY);
+  
+  
+  
+  ctx.stroke();
+}
+
+}
+
+captchav1();
+
+
+
+</script>
+
+</body>
+</html>

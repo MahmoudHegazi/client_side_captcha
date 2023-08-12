@@ -4,8 +4,8 @@
 <h1>HTML5 Canvas</h1>
 
 
-<p>this is simple captcha js using random position for clicked input instead of fixed position, if poived for it encyprtion and decyrption between client and server could be relaibe to be used</p>
 
+<p>the idea based on to automate this you must use AI to process image and get poistions and back to app to automate click, no javascript or fixed position app clicker, note google captcha v2 uses div for input within iframe which by eye says it can inspeacted some how and 2 document.querySelector passes it np</p>
 
 <p style="margin:0;">Click inside the blue sqaure to confirm you are not robot</p>
 <div style="width:100%;">
@@ -25,6 +25,8 @@ function captchav1(){
 let randomStartWidth = 0, randomStartHeight = 0;
 let repeater = true;
 
+let invalidCounter = 0;
+let oldTimeout = null;
 
 function randomStart(){
   ctx.clearRect(0, 0,200, 200);
@@ -37,14 +39,17 @@ function randomStart(){
   ctx.rect(randomStartWidth,randomStartHeight,40,40);
   
   ctx.stroke();
-
+  
+  if (oldTimeout){
+    clearTimeout(oldTimeout);
+  }
   // captcha expire after 7 seconds if not answered
-  setTimeout( ()=>{
+  oldTimeout = setTimeout( ()=>{
     if (repeater){
       randomStart();
     }
    }
-   , 5000 );
+   , 4000 );
   
 }
 
@@ -77,6 +82,12 @@ function on_canvas_click(ev) {
   
   if (validY && validX){
     drawNick();
+  } else {
+    invalidCounter += 1;
+    if (invalidCounter > 3){
+      invalidCounter = 0;
+      randomStart();
+    }
   }
 }
 

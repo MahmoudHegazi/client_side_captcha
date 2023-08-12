@@ -1,0 +1,2 @@
+# client_side_captcha
+This is a simple recaptcha js process that uses a random position of the clicked entry instead of a fixed position it only requires encoding and decoding and makes the backend language provide the random position numbers and the way to send the secure encrypted ajax request for validation by the backend using the provided position numbers, and unlike google captcha it's not element within iframe that can simple got by javascript and clicked it uses canvas shapes so no inpsect real not customized by iframe
